@@ -17,14 +17,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resources.nlp import NLPAnalyzer, NLP
+from resources.query_service import QueryService
 from flask_restful import Api, Resource, reqparse
 from flask import Flask, render_template, send_from_directory
 
 
 app = Flask(__name__)
 api = Api(app)
-api.add_resource(NLP, '/news_urls')
+api.add_resource(QueryService, '/news_urls')
 
 
 @app.route("/")

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html style="margin: auto; display:table;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+    </script>
+    <script>var synth = window.speechSynthesis;</script>
+    <style>
+        .speech {
+            border: 0px solid #DDD;
+            width: 600px;
+            padding: 0;
+            margin: 0;
+            font-family: "Calibri";
+        }
+
+            .speech input {
+                border: 1;
+                width: 240px;
+                display: inline-block;
+                height: 30px;
+            }
+
+            .speech img {
+                float: right;
+                width: 40px;
+            }
+    </style>
+</head>
+
+<body bgcolor="#e2e2e2">
+    <h1 style="font-family: Calibri;">Delbot</h1>
+    <div class="speech" ><i>It understands your voice commands, searches news and knowledge sources, and summarizes and reads out content to you.</i></div>
+    <br /><i class="speech"><font color="gray">Only tested on Windows PCs. Not tested on other PCs or mobile devices.</font></i>
+
+    <div class="speech">
+            <h3>
+                Press the <a href="#btn_query">Query</a> button to issue a voice query.
+                You might be prompted to allow microphone access.
+            </h3>
+            <p>You can issue voice queries of the following forms as of now.</p>
+            <h3>News</h3>
+            <ul>
+                <li>Give me news related to French cheese from the Guardian.</li>
+                <li>What are the latest updates on Star Wars Episode VIII in the Guardian?</li>
+                <li>Fetch me the latest news on artificial intelligence.</li>
+                <li>What is the latest on particle physics in the New York Times?</li>
+            </ul>
+            <p>
+                <i>
+                    Note: The current version supports NY Times and The Guardian as sources. Unknown sources will
+                    default to NY Times. Also, the source is expected to be mentioned at the end of the query. You could
+                    say NY Times or nyt instead of the full name.
+                </i>
+            </p>
+            <h3>Knowledge</h3>
+            <ul>
+                <li>John Deere</li>
+                <li>What is physics?</li>
+                <li>Who was Joan of Arc?</li>
+                <li>What is an RDF triple?</li>
+                <li>Tell me something about Star Wars: A New Hope</li>
+            </ul>
+            <p>
+                <i>
+                    Note: The current version uses Wikipedia API for knowledge queries. There might be an
+                    occasional lengthy lag.
+                </i>
+            </p>
+            <textarea style="width: 600px;font-family: Calibri;font-size:x-large" name="q" id="transcript"
+                      placeholder="Your query will appear here after you speak." rows="2" readonly="True"></textarea>
+            <br>
+            <input id="btn_query" type="button" onclick="startDictation()" value="Query"
+                   style="font-family: Calibri;" />
+            <img src="static/loader.gif" width="100px" align="left" style="float: left" hidden="True" id="loader" />
+            <br><br>
+            <h2 class="speech">Results</h2>
+            <textarea style="width: 600px;font-family: Calibri;font-size:x-large" id="output" rows="2" placeholder="Results will appear here."
+                      readonly="True"></textarea>
+            <input id="btn_speak" type="button" value="Speak" onclick="btnClick()" style="font-family: Calibri;" />
+
+    </div>
+
+    <!-- HTML5 Speech Recognition API -->
+    <script>
+            function startDictation() {
+                document.getElementById('transcript').value = '';
+                document.getElementById('output').value = '';
+                if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                    var recognition = new webkitSpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.lang = "en-US";
+                    recognition.start();
+                    recognition.onresult = function (e) {
+                        document.getElementById('loader').hidden = false;
+                        document.getElementById('transcript').value = e.results[0][0].transcript;
+                        recognition.stop();
+                        var data = e.results[0][0].transcript;
+                        $.post("http://localhost:5000/news_urls", { "data": data },
+                        function (response) {
+                        document.getElementById('loader').hidden = true;
+                            data = response;
+                            document.getElementById("output").value = data["urls"];
+                        }).error(function (response) {
+                        document.getElementById('loader').hidden = true;
+                            if (response.status == 400)
+                                text = jQuery.parseJSON(response.responseText)["phrase"];
+                            else
+                                text = "I'm sorry. I did not get that.";
+                            document.getElementById("output").value = text;
+                        });
+                    };
+                    recognition.onerror = function (e) {
+                        recognition.stop();
+                        console.log("Recognition had an error");
+                    }
+                }
+            }
+
+            function btnClick() {
+	                synth.cancel();
+                    var utterThis = new SpeechSynthesisUtterance(document.getElementById("output").value);
+                    utterThis.voice = synth.getVoices()[0];
+                    utterThis.pitch = 1.0;
+                    utterThis.rate = 0.8;
+                    utterThis.onerror = function(e) { console.log("Something went wrong with utterance."); };
+                    synth.speak(utterThis);
+            }
+    </script>
+
+</body>
+
+</html>

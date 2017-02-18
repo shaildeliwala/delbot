@@ -25,7 +25,8 @@ Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on 
 6. [Web App](https://github.com/shaildeliwala/delbot#web-app-optional)
 7. [Limitations](https://github.com/shaildeliwala/delbot#limitations)
 8. [Conclusion and Future Work](https://github.com/shaildeliwala/delbot#conclusion-and-future-work)
-9. [References](https://github.com/shaildeliwala/delbot#references)
+9. [Demo](https://github.com/shaildeliwala/delbot#demo)
+10. [References and Links](https://github.com/shaildeliwala/delbot#references-and-links)
 
 # Introduction
 Bots remain a hot topic. Everyone is talking about them.
@@ -40,7 +41,7 @@ How about building one from scratch? The simple one we will build today will und
 
 Our goal is to code a bot from the ground up and use [nature language processing (NLP)](https://en.wikipedia.org/wiki/Natural_language_processing) while doing so.
 
-In addition, our bot will be completely web-based and voice-enabled if you complete the web app section as well. The best part is we do not need to do anything fancy for speech recognition and synthesis: we will use a [built-in](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) capability of modern web browsers.
+In addition, our bot will be voice-enabled and web-based if you complete the web app section as well. The best part is we do not need to do anything fancy for speech recognition and synthesis: we will use a [built-in](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) capability of modern web browsers.
 
 # Overview
 At a high level, we want to be able to understand two broad types of queries. Following is the flowchart.
@@ -54,22 +55,22 @@ We might ask for **news**. E.g.:
 >What is the latest on Fantastic Beasts in the Guardian?
 
 The bot will query the API of the requested news source (New York Times if none is specified) and summarize the results:<br>
->[...] Comparing the first Harry Potter film (2001’s Harry Potter and the Philosopher’s Stone) with the last (2011’s Harry Potter and the Deathly Hallows Part Two) is somewhat akin to comparing Bambi with Reservoir Dogs. We first meet him in 1920s New York – almost 60 years before Harry is even born – where he is [...]
+>[...] Comparing the first Harry Potter film (2001’s Harry Potter and the Philosopher’s Stone) with the last (2011’s Harry Potter and the Deathly Hallows Part Two) is somewhat akin to comparing Bambi with Reservoir Dogs. We first meet him in 1920s New York – almost 60 years before Harry is even born – where he is [...]<br>
 (source: https://www.theguardian.com/books/2016/nov/25/jk-rowling-fantastic-beasts-screenplay)
 
 ## Knowledge
 
-We might ask a **knowledge** question. E.g.:<br>
+We might ask a **knowledge** question. E.g.:
 >What are RDF triples?
 
 And the bot will answer:<br>
->A semantic triple, or simply triple, is the atomic data entity in the Resource Description Framework .\nThis format enables knowledge to be represented in a machine-readable way. Particularly, every part of an RDF triple is individually addressable via unique URIs \u2014 for example, the second statement above might be represented in RDF as http://example.name#BobSmith12 http://xmlns.com/foaf/0.1/knows http://example.name#JohnDoe34.
+>A semantic triple, or simply triple, is the atomic data entity in the Resource Description Framework .\nThis format enables knowledge to be represented in a machine-readable way. Particularly, every part of an RDF triple is individually addressable via unique URIs \u2014 for example, the second statement above might be represented in RDF as http://example.name#BobSmith12 http://xmlns.com/foaf/0.1/knows http://example.name#JohnDoe34.<br>
 (source: https://en.wikipedia.org/wiki/Semantic_triple)
 
 # How It Works
 We define a simple rule to categorize inputs: if the query contains either of the words _news_ or _latest_, it is a _news query_. Otherwise, it is a _knowledge query_.
 
-The [`predict`](https://github.com/shaildeliwala/delbot/blob/master/resources/query_service.py#L38) function of the [`QueryAnalyzer`](https://github.com/shaildeliwala/delbot/blob/master/resources/query_service.py#L34) class is the main entry point for our bot. It performs the above categorization. It calls other functions to
+The [`predict`](resources/query_service.py#L38) function of the [`QueryAnalyzer`](resources/query_service.py#L34) class is the main entry point for our bot. It performs the above categorization. It calls other functions to
 
 1. Extract the _query_ and, if applicable, the _source_ from the input
 2. Make necessary API calls
@@ -122,9 +123,9 @@ _Adpositions_, simply put, are [prepositions and postpositions](https://en.wikip
 In a [head-initial](https://en.wikipedia.org/wiki/Head_(linguistics)) language like English, adpositions usually precede the noun phrase. E.g. characters _from_ the Marvel Cinematic Universe. While in a head-final language like Gujarati, adpositions follow the noun phrase. These are postpositions. E.g. માર્વેલ ચલચિત્ર જગત_ના_ પાત્રો, which translates word by word to: Marvel Cinematic Universe of characters.
 
 ### Implementation
-We invoke [`get_news_tokens`](https://github.com/shaildeliwala/delbot/blob/master/query_extractor.py#L40) from the [`QueryExtractor`](https://github.com/shaildeliwala/delbot/blob/master/query_extractor.py#L28) class, which extracts the _source_ and the _query_ from the input. Internally, it calls `_split_text` to extract noun chunks, parts of speech, and the fully parsed text from the input. We lemmatize terms in the query.
+We invoke [`get_news_tokens`](query_extractor.py#L40) from the [`QueryExtractor`](query_extractor.py#L28) class, which extracts the _source_ and the _query_ from the input. Internally, it calls `_split_text` to extract noun chunks, parts of speech, and the fully parsed text from the input. We lemmatize terms in the query.
 
-Next we invoke the [`get_news`](https://github.com/shaildeliwala/delbot/blob/master/media_aggregator.py#L67) function using _query_ on one of the `Aggregator` classes in [media_aggregator.py](https://github.com/shaildeliwala/delbot/blob/master/media_aggregator.py) based on the _source_. This returns a list of news articles that were sent as a response by the news API. We currently support [The Guardian API](http://open-platform.theguardian.com/) and [The New York Times API](https://developer.nytimes.com/).
+Next, we invoke the [`get_news`](media_aggregator.py#L67) function using _query_ on one of the `Aggregator` classes in [media_aggregator.py](media_aggregator.py) based on the _source_. This returns a list of news articles that were sent as a response by the news API. We currently support [The Guardian API](http://open-platform.theguardian.com/) and [The New York Times API](https://developer.nytimes.com/).
 
 Finally, we pick the first item (by default) from the _response_ list and summarize it using the [`shorten_news`](https://github.com/shaildeliwala/delbot/blob/master/media_aggregator.py#L76) function.
 
@@ -191,12 +192,12 @@ If we find an [auxiliary verb](https://www.ego4u.com/en/cram-up/grammar/auxiliar
 Otherwise, we treat all noun chunks after the first as the query. Thus, in **Example 2**, the query is _he-man the masters the universe_.
 
 ### Implementation
-We invoke [`get_knowledge_tokens`] from the `QueryExtractor` class, which extracts the _query_.
+We invoke [`get_knowledge_tokens`](query_extractor.py#L50) from the [`QueryExtractor`](query_extractor.py#L28) class, which extracts the _query_.
 
-We pass this to the `get_gkg` function, which queries the Wikipedia API through the _wikipedia_ Python package and returns a 5-sentence summary of the top result.
+We pass this to the [`get_gkg`](media_aggregator.py#L89) function, which queries the Wikipedia API through the _wikipedia_ Python package and returns a 5-sentence summary of the top result.
 
 # Summarization
-I used the `FrequencySummarizer` class from [Text summarization with NLTK](http://glowingpython.blogspot.in/2014/09/text-summarization-with-nltk.html). Alternatively, you could use [sumy](https://pypi.python.org/pypi/sumy).
+I used the [`FrequencySummarizer`](summarizer.py#L29) class from [Text summarization with NLTK](http://glowingpython.blogspot.in/2014/09/text-summarization-with-nltk.html). Alternatively, you could use [sumy](https://pypi.python.org/pypi/sumy).
 
 # Libraries
 In addition to the packages _re_, _bs4_, _requests_, _operator_, _collections_, _heapq_, _string_ and _nltk_, we will use the following.
@@ -213,12 +214,12 @@ In addition to the packages _re_, _bs4_, _requests_, _operator_, _collections_, 
 We add a cool webpage from which you can fire off voice queries and have the browser read out the response content. We make use of the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) for this.
 
 ## Web Service
-We get our Flask-based REST web service up and running in under 20 lines of code. The `BotService` class handles requests.
+We get our Flask-based REST web service up and running in under 20 lines of code. The [`QueryService`](resources/query_service.py#L27) class handles requests.
 
-As of now, we only need one service call to send input from our web app to our bot. This is done through the `post` function of `BotService` class. `post`, in turn, calls the `predict` function, which is the main entry point as mentioned [above](https://github.com/shaildeliwala/delbot#how-it-works).
+As of now, we only need one service call to send input from our web app to our bot. This is done through the [`post`](resources/query_service.py#L28) function of the `QueryService` class. `post`, in turn, calls the `predict` function, which is the main entry point as mentioned [above](https://github.com/shaildeliwala/delbot#how-it-works).
 
 ## Web Site
-I built a basic webpage to demonstrate the bot. It uses the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) to receive voice input and read out content. You can find the index.html file in the templates folder. Make sure you have installed all the required packages and libraries, and that the web service is up and running before you open the website.
+I built a basic webpage to demonstrate the bot. It uses the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) to receive voice input and read out content. You can find the [index.html](templates/index.html) file in the templates folder. Make sure you have installed all the required packages and libraries, and that the web service is up and running before you open the website.
 
 # Limitations
 Our simple bot understands a limited range of requests. It cannot understand other kinds of requests such as follows.
@@ -266,3 +267,7 @@ We could implement a machine learning-based solution so our bot could potentiall
 6. [New York Times Developer API](https://developer.nytimes.com/)
 7. [The Guardian Open Platform](http://open-platform.theguardian.com/)
 8. [Quora thread: What makes natural language processing difficult?](https://www.quora.com/What-makes-natural-language-processing-difficult)
+
+Please make sure to read the terms of use of the APIs used here.
+<hr>
+Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on LinkedIn.

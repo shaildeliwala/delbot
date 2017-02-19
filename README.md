@@ -4,6 +4,12 @@ It understands your voice commands, searches news and knowledge sources, and sum
 
 Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on [LinkedIn](https://www.linkedin.com/pulse/delbot-building-bot-from-scratch-python-shail-deliwala).
 
+# How to Run
+1. Install the required [packages](https://github.com/shaildeliwala/delbot#libraries).
+2. Open a command prompt and navigate to root folder of project.
+3. Enter `python app.py` in command prompt to launch web service.
+4. Go to http://localhost:5000 (or whichever IP and port you specified).
+
 # Index
 1. [Introduction](https://github.com/shaildeliwala/delbot#introduction)
 2. [Overview](https://github.com/shaildeliwala/delbot#overview)
@@ -270,4 +276,4 @@ We could implement a machine learning-based solution so our bot could potentiall
 
 Please make sure to read the terms of use of the APIs used here.
 <hr>
-Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on LinkedIn.
+Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on [LinkedIn](https://www.linkedin.com/pulse/delbot-building-bot-from-scratch-python-shail-deliwala).

@@ -2,7 +2,7 @@
 
 It understands your voice commands, searches news and knowledge sources, and summarizes and reads out content to you.
 
-Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on LinkedIn.
+Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on [LinkedIn](https://www.linkedin.com/pulse/delbot-building-bot-from-scratch-python-shail-deliwala).
 
 # Index
 1. [Introduction](https://github.com/shaildeliwala/delbot#introduction)

@@ -10,6 +10,11 @@ Check out the demo [video](https://youtu.be/iVmj1gHOF0w) or read the article on 
 3. Enter `python app.py` in command prompt to launch web service.
 4. Go to http://localhost:5000 (or whichever IP and port you specified).
 
+# Roadmap
+1. Statistical model to determine category such as _who_, _why_, _what_, and _when_ of knowledge questions.
+2. Headlines-only news request.
+3. Better UI!
+
 # Index
 1. [Introduction](https://github.com/shaildeliwala/delbot#introduction)
 2. [Overview](https://github.com/shaildeliwala/delbot#overview)

@@ -105,7 +105,7 @@
                         }).error(function (response) {
                         document.getElementById('loader').hidden = true;
                             if (response.status == 400)
-                                text = jQuery.parseJSON(response.responseText)["phrase"];
+                                text = jQuery.parseJSON(response.responseText)["original_exception"];
                             else
                                 text = "I'm sorry. I did not get that.";
                             document.getElementById("output").value = text;
@@ -128,7 +128,5 @@
                     synth.speak(utterThis);
             }
     </script>
-
 </body>
-
 </html>

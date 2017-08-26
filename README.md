@@ -2,7 +2,9 @@
 
 It understands your voice commands, searches news and knowledge sources, and summarizes and reads out content to you.
 
-Check out the demo [video](https://youtu.be/iVmj1gHOF0w). Also read my Delbot article published in [Chatbots Magazine](https://chatbotsmagazine.com/delbot-nlp-python-bot-1a46d865e38b).
+Check out the demo [video](https://youtu.be/iVmj1gHOF0w).
+
+Chatbots Magazine featured my [Delbot article](https://chatbotsmagazine.com/delbot-nlp-python-bot-1a46d865e38b) in [The Top 100 articles on Chatbots Magazine](https://chatbotsmagazine.com/the-top-100-articles-on-chatbots-magazine-754fc1beca26).
 
 # How to Run
 1. Install the required [packages](https://github.com/shaildeliwala/delbot#libraries).

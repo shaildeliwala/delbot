@@ -1,0 +1,5 @@
+wikipedia
+spacy
+nltk
+Flask
+Flask-RESTful
